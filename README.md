@@ -1,4 +1,4 @@
-# Mobile App - Tauri Android Delivery
+# Mobile App - Tauri Android 
 
 เอกสารนี้สรุปวิธีติดตั้ง ใช้งาน ส่งมอบ และ build แอป Android จากโปรเจกต์นี้สำหรับลูกค้าและทีมพัฒนา
 
