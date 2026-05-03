@@ -1,0 +1,904 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap');
+
+/* ==========================================
+   Switch Rules Game — CSS
+   ========================================== */
+
+.switch-rules-app {
+    --correct: #4caf50;
+    --wrong: #e67e22;
+    --tile-bg: #ffffff;
+    --shadow: rgba(80, 87, 105, 0.1);
+    --rule-color: #6c5ce7;
+    --rule-shape: #00b894;
+    --rule-number: #e17055;
+
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.88), transparent 24%),
+        radial-gradient(circle at top right, rgba(220, 223, 228, 0.56), transparent 30%),
+        linear-gradient(180deg, #f7f8fa 0%, #f2f4f7 52%, #eef1f5 100%);
+    color: var(--ink-strong);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.switch-rules-app::before,
+.switch-rules-app::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.28;
+}
+
+.switch-rules-app::before {
+    width: 280px;
+    height: 280px;
+    top: 84px;
+    right: -72px;
+    background:
+        radial-gradient(circle at 78% 16%, rgba(108, 92, 231, 0.12) 0 18px, transparent 19px),
+        linear-gradient(180deg, transparent 0 100%);
+}
+
+.switch-rules-app::after {
+    width: 220px;
+    height: 220px;
+    left: -40px;
+    bottom: 72px;
+    background:
+        linear-gradient(135deg, rgba(108, 92, 231, 0.08) 0%, rgba(108, 92, 231, 0.02) 100%);
+    filter: blur(24px);
+    border-radius: 50%;
+}
+
+/* ==========================================
+   Header
+   ========================================== */
+.switch-rules-header {
+    width: 100%;
+    padding: 18px 68px 18px 68px;
+    text-align: center;
+    background:
+        linear-gradient(180deg, rgba(245, 246, 248, 0.98) 0%, rgba(240, 243, 247, 0.95) 100%);
+    border-bottom: 1px solid #dcdfe4;
+    box-shadow: 0 10px 24px rgba(80, 87, 105, 0.08);
+    z-index: 10;
+    position: relative;
+    overflow: hidden;
+}
+
+.switch-rules-header::before,
+.switch-rules-header::after {
+    content: '';
+    position: absolute;
+    color: rgba(108, 92, 231, 0.07);
+    pointer-events: none;
+}
+
+.switch-rules-header::before {
+    right: 22px;
+    top: -8px;
+    width: 98px;
+    height: 98px;
+    background:
+        radial-gradient(circle at 72% 20%, currentColor 0 15px, transparent 16px),
+        linear-gradient(60deg, transparent 0 50%, currentColor 50% 54%, transparent 54% 100%),
+        linear-gradient(-60deg, transparent 0 50%, currentColor 50% 54%, transparent 54% 100%);
+    opacity: 0.9;
+}
+
+.switch-rules-header::after {
+    right: 88px;
+    bottom: -18px;
+    width: 72px;
+    height: 72px;
+    background:
+        linear-gradient(60deg, transparent 0 48%, currentColor 48% 52%, transparent 52% 100%),
+        linear-gradient(-60deg, transparent 0 48%, currentColor 48% 52%, transparent 52% 100%);
+    opacity: 0.85;
+}
+
+.switch-rules-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: #303744;
+    letter-spacing: -0.03em;
+}
+
+.switch-rules-stats {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.switch-rules-stat-item {
+    background: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 14px rgba(80, 87, 105, 0.06);
+    font-size: 0.9rem;
+    border: 1px solid #dcdfe4;
+}
+
+.switch-rules-stat-item.timer {
+    color: #505769;
+    border: 2px solid #b0b5c1;
+    min-width: 100px;
+}
+
+.switch-rules-stat-item.timer.low-time {
+    color: #d35400;
+    border-color: #d35400;
+    animation: sr-pulse-warn 1s infinite;
+}
+
+/* ==========================================
+   Header Buttons
+   ========================================== */
+.switch-rules-btn-back {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    background: white;
+    border: 1px solid #dcdfe4;
+    color: #505769;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(80, 87, 105, 0.08);
+    transition: all 0.2s ease;
+}
+
+.switch-rules-btn-back:hover {
+    background: #f7f8fa;
+}
+
+.switch-rules-btn-back:active {
+    transform: scale(0.9);
+}
+
+.switch-rules-btn-pause {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    background: white;
+    border: 1px solid #dcdfe4;
+    color: #505769;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(80, 87, 105, 0.08);
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+.switch-rules-btn-pause:hover {
+    background: #f7f8fa;
+}
+
+.switch-rules-btn-pause:active {
+    transform: scale(0.9);
+}
+
+.switch-rules-btn-pause.is-paused {
+    background: linear-gradient(180deg, #677089 0%, #505769 100%);
+    color: white;
+    border-color: rgba(48, 55, 68, 0.2);
+    box-shadow: 0 10px 18px rgba(80, 87, 105, 0.16);
+}
+
+/* ==========================================
+   Game Container
+   ========================================== */
+.switch-rules-game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+    min-height: 0;
+    padding: clamp(0.6rem, 1.5vh, 1.2rem) 16px clamp(8px, 1.2vh, 14px);
+    position: relative;
+    gap: clamp(12px, 1.8vh, 18px);
+    overflow: hidden;
+}
+
+.switch-rules-current-score {
+    font-size: clamp(2.4rem, 4.5vh, 3.2rem);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1;
+    text-shadow: 0 4px 12px var(--shadow);
+    flex-shrink: 0;
+    transition: color 0.18s ease, text-shadow 0.18s ease;
+}
+
+.switch-rules-current-score.is-penalty {
+    color: #cf5d5d;
+    text-shadow: 0 8px 18px rgba(207, 93, 93, 0.22);
+}
+
+/* ==========================================
+   Rule Banner — Minimal style
+   ========================================== */
+.switch-rules-rule-banner {
+    width: auto;
+    max-width: min(100%, 360px);
+    padding: 10px 22px;
+    border-radius: 20px;
+    text-align: center;
+    color: var(--ink-muted);
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dcdfe4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    animation: sr-fade-in-soft 0.5s ease-out;
+}
+
+.switch-rules-rule-banner__label {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--ink-muted);
+    display: inline;
+}
+
+.switch-rules-rule-banner__text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--brand);
+}
+
+.switch-rules-rule-banner__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--brand);
+    flex-shrink: 0;
+}
+
+.switch-rules-rule-banner__icon {
+    font-size: 1.1rem !important;
+    line-height: 1;
+    color: white;
+}
+
+.switch-rules-rule-banner.is-switching {
+    animation: sr-rule-switch 0.65s ease;
+}
+
+.switch-rules-rule-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+    transform: translateX(-100%);
+    pointer-events: none;
+}
+
+.switch-rules-rule-banner.is-switching::after {
+    animation: sr-shimmer 0.9s ease;
+}
+
+/* ==========================================
+   Rule Switch Alert — Elderly-friendly
+   ========================================== */
+.switch-rules-switch-alert {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(150deg, #4a5568 0%, #5a6577 100%);
+    color: white;
+    padding: 28px 44px;
+    border-radius: 24px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-align: center;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 50px rgba(68, 82, 105, 0.35);
+    animation: sr-alert-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.switch-rules-switch-alert__icon {
+    font-size: 2.8rem !important;
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ==========================================
+   Stimulus Card
+   ========================================== */
+.switch-rules-stimulus-card {
+    width: min(85%, 300px, calc((100dvh - 380px) * 0.65));
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    background: white;
+    border: 4px solid #c8cdd6;
+    box-shadow: 0 10px 32px rgba(68, 82, 105, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    flex-shrink: 1;
+}
+
+.switch-rules-stimulus-card.is-entering {
+    animation: sr-card-enter 0.35s ease;
+}
+
+.switch-rules-stimulus-shape {
+    width: 65%;
+    height: 65%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-rules-stimulus-shape svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.switch-rules-stimulus-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2rem, 4vh, 2.8rem);
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+/* ==========================================
+   Choices
+   ========================================== */
+.switch-rules-choices {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.switch-rules-choice-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 130px;
+    padding: clamp(10px, 1.5vh, 16px) 8px;
+    border: 3px solid #dcdfe4;
+    border-radius: 18px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(80, 87, 105, 0.06), inset 0 -3px 0 rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.switch-rules-choice-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(80, 87, 105, 0.12), inset 0 -3px 0 rgba(0, 0, 0, 0.04);
+    border-color: #b0b5c1;
+}
+
+.switch-rules-choice-btn:active {
+    transform: scale(0.95) translateY(0);
+    box-shadow: 0 2px 6px rgba(80, 87, 105, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.switch-rules-choice-btn.is-correct {
+    border-color: var(--correct);
+    background: #e8f5e9;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+    transform: scale(1.05);
+}
+
+.switch-rules-choice-btn.is-wrong {
+    border-color: var(--wrong);
+    background: #fbeee6;
+    animation: sr-shake 0.4s ease;
+}
+
+.switch-rules-choice-btn.is-dimmed {
+    opacity: 0.4;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.switch-rules-choice-btn__shape {
+    width: 44px;
+    height: 44px;
+    margin-top: 6px;
+}
+
+.switch-rules-choice-btn__shape svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.1));
+}
+
+.switch-rules-choice-btn__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #303744;
+}
+
+.switch-rules-choice-btn__color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.switch-rules-choice-btn__number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #303744;
+}
+
+/* ==========================================
+   Message & Feedback
+   ========================================== */
+.switch-rules-message-box {
+    min-height: clamp(40px, 6vh, 54px);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.switch-rules-message {
+    font-size: clamp(1rem, 2.2vh, 1.15rem);
+    font-weight: 700;
+    color: var(--ink-strong);
+    margin-bottom: 3px;
+}
+
+.switch-rules-streak-info {
+    font-size: 0.85rem;
+    color: var(--brand);
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.switch-rules-question-counter {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.switch-rules-auto-progress-container {
+    width: 120px;
+    height: 5px;
+    background: #e0e0da;
+    margin: 4px auto 0;
+    border-radius: 3px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.switch-rules-auto-progress-bar {
+    height: 100%;
+    background: var(--brand);
+    transition: width 0.8s linear;
+}
+
+/* ==========================================
+   Pause Overlay
+   ========================================== */
+.switch-rules-pause-overlay {
+    position: absolute;
+    inset: 16px 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(242, 245, 248, 0.82);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    z-index: 30;
+}
+
+.switch-rules-pause-card {
+    width: min(100%, 320px);
+    padding: 24px 20px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid #dcdfe4;
+    box-shadow: 0 18px 34px rgba(80, 87, 105, 0.12);
+    text-align: center;
+    transform: translateY(-24px);
+}
+
+.switch-rules-pause-icon {
+    display: inline-flex;
+    margin-bottom: 8px;
+    font-size: 2.9rem;
+    line-height: 1;
+    color: #505769;
+}
+
+.switch-rules-pause-card h2 {
+    margin: 0 0 14px;
+    font-size: 1.35rem;
+    color: #303744;
+}
+
+.switch-rules-pause-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.switch-rules-btn-resume {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #677089 0%, #505769 100%);
+    color: white;
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 18px rgba(80, 87, 105, 0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.switch-rules-btn-resume:hover {
+    filter: brightness(1.03);
+    box-shadow: 0 14px 22px rgba(80, 87, 105, 0.2);
+}
+
+.switch-rules-btn-resume:active {
+    transform: scale(0.97);
+}
+
+.switch-rules-btn-reset {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #505769;
+    border: 1px solid #d3d8e0;
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(80, 87, 105, 0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.switch-rules-btn-reset:hover {
+    background: #f7f8fb;
+    box-shadow: 0 12px 20px rgba(80, 87, 105, 0.12);
+}
+
+.switch-rules-btn-reset:active {
+    transform: scale(0.97);
+}
+
+/* ==========================================
+   Start / Controls
+   ========================================== */
+.switch-rules-controls {
+    width: 100%;
+    padding: 0 20px 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.switch-rules-btn-start {
+    width: 100%;
+    max-width: 280px;
+    padding: 18px;
+    border: none;
+    border-radius: 100px;
+    background-color: var(--brand);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #254a6b, 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s;
+}
+
+.switch-rules-btn-start:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #254a6b;
+}
+
+/* ==========================================
+   Game Over Overlay
+   ========================================== */
+.switch-rules-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(249, 249, 247, 0.98);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 200;
+    padding: 24px 20px 36px;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.switch-rules-result-card {
+    background: white;
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 30px;
+    border: 2px solid var(--bg-warm);
+}
+
+.switch-rules-result-stat {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    font-size: 1.2rem;
+}
+
+.switch-rules-btn-restart {
+    padding: 15px 40px;
+    border-radius: 50px;
+    background: var(--brand);
+    color: white;
+    border: none;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.switch-rules-btn-exit {
+    margin-top: 15px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    background: transparent;
+    color: var(--ink-muted);
+    border: 2px solid var(--ink-muted);
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================
+   Particles
+   ========================================== */
+.switch-rules-particle {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 100;
+}
+
+/* ==========================================
+   Animations
+   ========================================== */
+@keyframes sr-pulse-warn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes sr-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+@keyframes sr-rule-switch {
+    0% { transform: scale(1); opacity: 0.5; }
+    30% { transform: scale(1.06); }
+    60% { transform: scale(0.98); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+@keyframes sr-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes sr-card-enter {
+    0% { opacity: 0; transform: scale(0.8) translateY(12px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes sr-alert-pop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes sr-fade-in-soft {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 520px) {
+    .switch-rules-header {
+        padding: 14px 62px 14px 62px;
+    }
+
+    .switch-rules-header h1 {
+        margin-bottom: 6px;
+        font-size: 1.45rem;
+    }
+
+    .switch-rules-btn-back,
+    .switch-rules-btn-pause {
+        width: 40px;
+        height: 40px;
+        top: 12px;
+    }
+
+    .switch-rules-btn-back {
+        left: 12px;
+    }
+
+    .switch-rules-btn-pause {
+        right: 12px;
+    }
+
+    .switch-rules-stat-item {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .switch-rules-pause-card {
+        width: min(100%, 300px);
+        padding: 22px 18px 18px;
+        transform: translateY(-16px);
+    }
+
+    .switch-rules-choice-btn {
+        padding: 10px 6px;
+    }
+}
+
+@media (max-height: 740px) {
+    .switch-rules-header {
+        padding: 12px 60px 12px 60px;
+    }
+
+    .switch-rules-header h1 {
+        margin-bottom: 4px;
+        font-size: 1.3rem;
+    }
+
+    .switch-rules-game-container {
+        padding: 0.5rem 14px 6px;
+        gap: 6px;
+    }
+
+    .switch-rules-rule-banner {
+        padding: 10px 18px 12px;
+    }
+
+    .switch-rules-rule-banner__label {
+        margin-bottom: 3px;
+        font-size: 0.78rem;
+    }
+
+    .switch-rules-rule-banner__text {
+        font-size: 1.3rem;
+        gap: 8px;
+    }
+
+    .switch-rules-rule-banner__icon-wrap {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+    }
+
+    .switch-rules-rule-banner__icon {
+        font-size: 1.35rem !important;
+    }
+
+    .switch-rules-stimulus-card {
+        border-width: 3px;
+        border-radius: 20px;
+    }
+
+    .switch-rules-stimulus-number {
+        font-size: 1.5rem;
+    }
+
+    .switch-rules-choice-btn {
+        padding: 8px 5px;
+        border-radius: 14px;
+        gap: 3px;
+    }
+
+    .switch-rules-choice-btn__color-swatch {
+        width: 30px;
+        height: 30px;
+    }
+
+    .switch-rules-choice-btn__shape {
+        width: 36px;
+        height: 36px;
+    }
+
+    .switch-rules-choice-btn__number {
+        font-size: 1.4rem;
+    }
+
+    .switch-rules-choice-btn__label {
+        font-size: 0.85rem;
+    }
+}

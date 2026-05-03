@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime and environment
+.env
+.env.*
+!.env.example
+*.local
+
+# Dependencies and generated frontend output
+node_modules
+dist
+dist-ssr
+coverage
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Android delivery artifacts
+apk/*
+!apk/
+!apk/mobile-app-0.1.0-universal-release-signed.apk
+*.idsig
+
+# Native/build outputs are generated locally
+src-tauri/target/
+src-tauri/gen/schemas/

@@ -1,0 +1,607 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap');
+
+/* Memory Matrix specific variables (extends global) */
+.memory-matrix-app {
+    --correct: #4caf50;
+    --wrong: #e67e22;
+    --tile-bg: #e6e1d4;
+    --shadow: rgba(27, 47, 68, 0.12);
+    --panel-bg: rgba(255, 255, 255, 0.82);
+    --panel-border: rgba(53, 98, 138, 0.14);
+    --tile-shadow: rgba(45, 61, 79, 0.14);
+
+    background:
+        radial-gradient(circle at top left, rgba(255, 227, 184, 0.65), transparent 30%),
+        radial-gradient(circle at top right, rgba(184, 216, 255, 0.6), transparent 34%),
+        linear-gradient(180deg, #fbf8f2 0%, #f4f6f8 55%, #eef4f9 100%);
+    color: var(--ink-strong);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    padding-bottom: 24px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.memory-matrix-app::before,
+.memory-matrix-app::after {
+    content: '';
+    position: absolute;
+    border-radius: 999px;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(8px);
+}
+
+.memory-matrix-app::before {
+    width: 320px;
+    height: 320px;
+    top: 110px;
+    left: -110px;
+    background: radial-gradient(circle, rgba(255, 214, 153, 0.34), rgba(255, 214, 153, 0));
+}
+
+.memory-matrix-app::after {
+    width: 380px;
+    height: 380px;
+    right: -150px;
+    bottom: 40px;
+    background: radial-gradient(circle, rgba(149, 190, 236, 0.28), rgba(149, 190, 236, 0));
+}
+
+.memory-matrix-header {
+    width: 100%;
+    padding: 20px 72px 18px 72px;
+    text-align: center;
+    background:
+        linear-gradient(180deg, rgba(255, 249, 240, 0.96) 0%, rgba(255, 255, 255, 0.88) 100%);
+    border-bottom: 1px solid rgba(53, 98, 138, 0.12);
+    box-shadow: 0 12px 30px rgba(49, 73, 97, 0.08);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    position: relative;
+}
+
+.memory-matrix-btn-back {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f2f6fb 100%);
+    border: 1px solid rgba(53, 98, 138, 0.14);
+    color: var(--ink-strong);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(49, 73, 97, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.memory-matrix-btn-pause {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f2f6fb 100%);
+    border: 1px solid rgba(53, 98, 138, 0.14);
+    color: var(--brand);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(49, 73, 97, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.memory-matrix-btn-pause:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #ebf2fa 100%);
+    box-shadow: 0 12px 24px rgba(49, 73, 97, 0.16);
+}
+
+.memory-matrix-btn-pause:active {
+    transform: scale(0.94);
+}
+
+.memory-matrix-btn-pause.is-paused {
+    background: linear-gradient(180deg, #4b7ea9 0%, var(--brand) 100%);
+    color: #ffffff;
+    border-color: rgba(37, 74, 107, 0.28);
+}
+
+.memory-matrix-btn-back:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #ebf2fa 100%);
+    box-shadow: 0 12px 24px rgba(49, 73, 97, 0.16);
+}
+
+.memory-matrix-btn-back:active {
+    transform: scale(0.94);
+}
+
+.memory-matrix-header h1 {
+    margin: 0 0 10px 0;
+    font-size: clamp(1.75rem, 2vw + 1.15rem, 2.25rem);
+    color: var(--brand);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-shadow: 0 4px 12px rgba(255, 255, 255, 0.75);
+}
+
+.memory-matrix-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.memory-matrix-stat-item {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 8px 18px rgba(49, 73, 97, 0.08);
+    font-size: 1rem;
+    border: 1px solid rgba(53, 98, 138, 0.12);
+}
+
+.memory-matrix-stat-item.timer {
+    color: var(--brand);
+    border: 2px solid rgba(53, 98, 138, 0.5);
+    min-width: 120px;
+}
+
+.memory-matrix-stat-item.timer.low-time {
+    color: #d35400;
+    border-color: #d35400;
+    animation: pulse-warn 1s infinite;
+}
+
+.memory-matrix-game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem 16px 10px;
+    position: relative;
+    gap: 18px;
+}
+
+.memory-matrix-current-score {
+    min-width: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: clamp(3rem, 7vw, 3.9rem);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1;
+    text-align: center;
+    text-shadow:
+        0 8px 20px rgba(53, 98, 138, 0.18),
+        0 1px 0 rgba(255, 255, 255, 0.65);
+    margin-bottom: 4px;
+    transition: color 0.18s ease, text-shadow 0.18s ease;
+}
+
+.memory-matrix-current-score.is-penalty {
+    color: #cf5d5d;
+    text-shadow:
+        0 8px 20px rgba(207, 93, 93, 0.22),
+        0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.memory-matrix-grid {
+    display: grid;
+    gap: 14px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.97) 0%, rgba(242, 246, 251, 0.96) 100%);
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow:
+        0 24px 40px rgba(49, 73, 97, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--panel-border);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.memory-matrix-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top left, rgba(255, 236, 208, 0.5), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 40%);
+    pointer-events: none;
+}
+
+.memory-matrix-tile {
+    background: linear-gradient(180deg, #efebe2 0%, var(--tile-bg) 100%);
+    border-radius: 13px;
+    cursor: pointer;
+    transition:
+        transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(112, 106, 92, 0.08);
+    box-shadow:
+        inset 0 -4px 0 rgba(128, 112, 86, 0.16),
+        0 6px 12px rgba(49, 73, 97, 0.06);
+}
+
+.memory-matrix-tile:active {
+    transform: scale(0.94);
+}
+
+.memory-matrix-tile.active {
+    background: linear-gradient(180deg, #6a9dca 0%, var(--brand) 100%);
+    box-shadow:
+        0 10px 18px rgba(53, 98, 138, 0.18),
+        inset 0 -4px 0 rgba(20, 48, 72, 0.24);
+    transform: scale(0.97);
+}
+
+.memory-matrix-tile.correct {
+    background: linear-gradient(180deg, #75d78e 0%, var(--correct) 100%) !important;
+    box-shadow:
+        0 0 18px rgba(76, 175, 80, 0.28),
+        0 8px 16px rgba(76, 175, 80, 0.16),
+        inset 0 -4px 0 rgba(0, 0, 0, 0.16);
+    z-index: 2;
+}
+
+.memory-matrix-tile.wrong {
+    background: linear-gradient(180deg, #f3a864 0%, var(--wrong) 100%) !important;
+    box-shadow:
+        0 8px 16px rgba(230, 126, 34, 0.16),
+        inset 0 -4px 0 rgba(0, 0, 0, 0.16);
+    animation: mm-shake 0.4s;
+}
+
+.memory-matrix-message-box {
+    width: min(100%, 420px);
+    margin-top: 2px;
+    min-height: 92px;
+    text-align: center;
+    padding: 8px 10px 6px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.memory-matrix-message {
+    font-size: 1.22rem;
+    font-weight: 700;
+    color: var(--ink-strong);
+    margin-bottom: 8px;
+    line-height: 1.55;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.memory-matrix-streak-info {
+    font-size: 1rem;
+    color: var(--brand);
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.memory-matrix-auto-progress-container {
+    width: 144px;
+    height: 8px;
+    background: rgba(224, 224, 218, 0.95);
+    margin: 10px auto 0;
+    border-radius: 999px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: inset 0 2px 4px rgba(49, 73, 97, 0.12);
+}
+
+.memory-matrix-auto-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #74a6d4 0%, var(--brand) 100%);
+    transition: width 1s linear;
+}
+
+.memory-matrix-pause-overlay {
+    position: absolute;
+    inset: 18px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(244, 248, 252, 0.78);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    z-index: 30;
+}
+
+.memory-matrix-pause-card {
+    width: min(100%, 320px);
+    padding: 24px 20px 20px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(53, 98, 138, 0.14);
+    box-shadow: 0 18px 36px rgba(27, 47, 68, 0.14);
+    text-align: center;
+    transform: translateY(-22px);
+}
+
+.memory-matrix-pause-icon {
+    display: inline-flex;
+    margin-bottom: 8px;
+    font-size: 2.9rem;
+    line-height: 1;
+    color: var(--brand);
+}
+
+.memory-matrix-pause-card h2 {
+    margin: 0 0 14px;
+    font-size: 1.35rem;
+    color: var(--ink-strong);
+}
+
+.memory-matrix-pause-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.memory-matrix-btn-resume {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #4b7ea9 0%, var(--brand) 100%);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 22px rgba(27, 47, 68, 0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.memory-matrix-btn-resume:hover {
+    filter: brightness(1.04);
+    box-shadow: 0 14px 24px rgba(27, 47, 68, 0.2);
+}
+
+.memory-matrix-btn-resume:active {
+    transform: scale(0.97);
+}
+
+.memory-matrix-btn-reset {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--brand);
+    border: 1px solid rgba(53, 98, 138, 0.18);
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 18px rgba(27, 47, 68, 0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.memory-matrix-btn-reset:hover {
+    background: #f5f9fd;
+    box-shadow: 0 12px 20px rgba(27, 47, 68, 0.12);
+}
+
+.memory-matrix-btn-reset:active {
+    transform: scale(0.97);
+}
+
+.memory-matrix-controls {
+    width: 100%;
+    padding: 0 20px 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.memory-matrix-btn-start {
+    width: 100%;
+    max-width: 280px;
+    padding: 18px;
+    border: none;
+    border-radius: 100px;
+    background: linear-gradient(180deg, #4b7ea9 0%, var(--brand) 100%);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #254a6b, 0 16px 24px rgba(27, 47, 68, 0.2);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.memory-matrix-btn-start:hover {
+    filter: brightness(1.04);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 0 #254a6b, 0 18px 26px rgba(27, 47, 68, 0.22);
+}
+
+.memory-matrix-btn-start:active {
+    transform: translateY(4px);
+    box-shadow: 0 3px 0 #254a6b;
+}
+
+.memory-matrix-particle {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 100;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.memory-matrix-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(circle at top, rgba(255, 226, 183, 0.28), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(185, 216, 255, 0.22), transparent 34%),
+        rgba(249, 249, 247, 0.94);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 200;
+    padding: 24px 20px 36px;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.memory-matrix-result-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.96) 100%);
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0 24px 54px rgba(27, 47, 68, 0.12);
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(53, 98, 138, 0.14);
+}
+
+.memory-matrix-result-stat {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    font-size: 1.2rem;
+}
+
+.memory-matrix-result-card p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.memory-matrix-btn-restart {
+    padding: 15px 40px;
+    border-radius: 50px;
+    background: linear-gradient(180deg, #4b7ea9 0%, var(--brand) 100%);
+    color: white;
+    border: none;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(27, 47, 68, 0.18);
+}
+
+/* Added to allow navigating back */
+.memory-matrix-btn-exit {
+    margin-top: 15px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--ink-muted);
+    border: 1px solid rgba(90, 96, 94, 0.24);
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(27, 47, 68, 0.08);
+}
+
+@keyframes pulse-warn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes mm-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+@media (max-width: 520px) {
+    .memory-matrix-header {
+        padding: 18px 64px 16px 64px;
+    }
+
+    .memory-matrix-btn-back {
+        left: 14px;
+        top: 14px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .memory-matrix-btn-pause {
+        right: 14px;
+        top: 14px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .memory-matrix-game-container {
+        padding: 1.5rem 14px 10px;
+        gap: 16px;
+    }
+
+    .memory-matrix-grid {
+        gap: 10px;
+        padding: 16px;
+        border-radius: 24px;
+    }
+
+    .memory-matrix-tile {
+        border-radius: 11px;
+    }
+
+    .memory-matrix-current-score {
+        min-width: auto;
+        padding: 0;
+    }
+
+    .memory-matrix-message-box {
+        min-height: 84px;
+        padding: 6px 6px 4px;
+    }
+
+    .memory-matrix-pause-card {
+        width: min(100%, 300px);
+        padding: 22px 18px 18px;
+        transform: translateY(-16px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .memory-matrix-app *,
+    .memory-matrix-app *::before,
+    .memory-matrix-app *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
+    }
+}
